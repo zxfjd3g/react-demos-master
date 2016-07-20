@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+    /*
+     自定义组件(Component)
+     //1. 创建组件类
+     var MyComponent = React.createClass({
+         render : function () {
+             return (
+                <h1>自定义组件标题</h1>
+             );
+         }
+     });
+     //2. 渲染组件
+     ReactDOM.render(<MyComponent/>, document.getElementById('example'));
+
+     注意:
+        1. 返回的组件类必须首字母大写
+        2. 返回的组件类是一个构造函数
+        3. 调用createClass()指定的对象包含的属性是组件对象
+        4. 当去通过ReactDOM.render()来渲染组件标签时, React内部会创建组件对象
+     */
+
+    //1. 创建一个组件类
+    var MyComponent = React.createClass({
+        render : function () {
+            console.log(this instanceof MyComponent);
+            console.log(this);
+            return (
+                    <h1>自定义组件标题2</h1>
+            );
+        }
+    });
+    console.log(MyComponent);
+    //2. 渲染组件
+    ReactDOM.render(<MyComponent/>, document.getElementById('example'));
+
+</script>
+</body>
+</html>

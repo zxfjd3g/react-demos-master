@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+    /*
+     组件的props属性:
+     1. 每个组件对象都会有props(properties的简写)属性
+     2. 组件标签的所有属性都保存在props中, 读取属性值: this.props.propertyName
+     3. 作用: 通过标签向组件内部传递数据
+     4. 可以通过组件的getDefaultProps方法指定默认的属性
+         getDefaultProps : function () {
+             return {
+                propertyName : propertyValue
+             }
+         }
+     */
+    var InfoComp = React.createClass({
+        render : function () {
+            return (
+                    <h2>我叫{this.props.n}, 年方{this.props.a}, 性别: {this.props.sex}</h2>
+            );
+        },
+        getDefaultProps : function () {
+            return {
+                sex : '男'
+            };
+        }
+    });
+
+    var person = {
+        name : 'Tom',
+        age : 12,
+    };
+    ReactDOM.render(<InfoComp n={person.name} a={person.age} sex="女"/>, document.getElementById('example'));
+
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+
+    /*
+     React没有ajax模块
+     1. 集成其它的js库(如jQuery), 发送ajax请求
+     2. 利用函数对象的bind()改变函数内部的this指向
+
+     测试url: https://api.github.com/users/octocat/gists
+     */
+
+    var MyComp = React.createClass({
+        render : function(){
+            return (
+                    <div>{this.state.username}'s last gist is <a href={this.state.lastUrl}>here</a></div>
+            );
+        },
+        getInitialState : function () {
+            return {
+                username : '',
+                lastUrl : '###'
+            };
+        },
+
+        componentDidMount : function () {
+            console.log('------');
+            //发送ajax请求
+            $.getJSON(this.props.source, function (gists) {
+                var lastGist = gists[0];
+                var username = lastGist.owner.login;
+                var lastUrl = lastGist.html_url;
+                //更新state
+                this.setState({
+                    username : username,
+                    lastUrl : lastUrl
+                });
+            }.bind(this));
+        }
+    });
+
+    ReactDOM.render(<MyComp source="https://api.github.com/users/octocat/gists"/>, document.getElementById('example'));
+
+</script>
+</body>
+</html>

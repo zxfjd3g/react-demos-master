@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <script src="../build/jquery.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+    /*
+        使用promise
+        测试url : https://api.github.com/search/repositories?q=javascript&sort=stars
+     */
+    //console.log($.getJSON('https://api.github.com/search/repositories?q=javascript&sort=stars'));
+
+    var MyComp = React.createClass({
+
+        getInitialState : function () {
+          return {
+              loading : true, //标识是否正在请求中
+              data : null, //成功返回的数据
+              error : null //失败信息
+          };
+        },
+
+        render : function(){
+
+            if(this.state.loading) {
+                return <span>loading...</span>
+            } else if(this.state.error!=null) {
+                return <span>ERROR: {this.state.error}</span>
+            } else {
+
+                var lis =  this.state.data.items.map(function (item, index) {
+                    return (
+                            <li key={index}>
+                                <a href={item.html_url}>{item.name}</a> ({item.stargazers_count} stars)
+                                <br/>
+                                {item.description}
+                            </li>
+                    );
+                });
+
+                return (
+                        <div>
+                            <h1>Most Popular JavaScript Projects in Github</h1>
+                            <ol>{lis}</ol>
+                        </div>
+                );
+            }
+        },
+
+        componentDidMount : function () {
+            this.props.promise.then(
+                    result => this.setState({loading : false, data : result}),
+                    error => this.setState({loading : false, error : error})
+            )
+        }
+    });
+
+
+    ReactDOM.render(<MyComp promise={$.getJSON('https://api.github.com/search/repositories?q=javascript&sort=stars')}/>, document.getElementById('example'));
+</script>
+</body>
+</html>

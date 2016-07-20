@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+    <style type="text/css">
+    table th,
+    table td {
+        text-align: center;
+    }
+    </style>
+    <script src="js/react.js"></script>
+    <script src="js/react-dom.js"></script>
+    <script src="js/browser.min.js"></script>
+    <script src="js/pubsub.js"></script>
+</head>
+
+<body>
+    <div className="container" id="students"></div>
+	
+    <script type="text/babel">
+        var data =  [
+                        {stName:"明明",sex:"女",age:18,height:165,weight:45,id:2},
+                        {stName:"乐乐",sex:"男",age:35,height:180,weight:80,id:0},
+                        {stName:"想想",sex:"女",age:22,height:171,weight:60,id:6},
+                        {stName:"心心",sex:"男",age:26,height:175,weight:70,id:1},
+                        {stName:"飞飞",sex:"女",age:18,height:170,weight:50,id:3},
+                        {stName:"天天",sex:"女",age:38,height:166,weight:50,id:4},
+                        {stName:"童童",sex:"男",age:30,height:175,weight:65,id:5}
+                    ];
+        var StudentComp = React.createClass({
+
+            getInitialState : function () {
+                return {
+                    students : data,
+                    filterSex : '',
+                    filterName : ''
+                };
+            },
+
+            render : function(){
+                return (
+                    <div>
+                        <h1>学员成信息表</h1>
+                        <FilterComp setSex={this.setSex} setName={this.setName}></FilterComp>
+                        <ListComp students={this.state.students}
+                                  fitlerSex={this.state.filterSex}
+                                  filterName={this.state.filterName}/>
+                    </div>
+                );
+            },
+
+            setSex : function (sex) {
+                this.setState({filterSex : sex});
+            },
+
+            setName : function (name) {
+                this.setState({filterName : name});
+            },
+
+            componentDidMount : function () {
+                PubSub.subscribe('deleteStudent', function (eventName, index) {
+                    this.state.students.splice(index, 1);
+                    this.setState({students : this.state.students});
+                }.bind(this))
+            }
+        });
+        
+        var FilterComp = React.createClass({
+            render : function(){
+                return (
+                    <div className="bs-example">
+                        <div className="form-group">
+                            <label>按性别筛选</label>
+                            <select className="form-control" onChange={this.changeSex}>
+                                <option value="">all</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label>按名字筛选</label>
+                            <input type="text" className="form-control" placeholder="请输入名字" onKeyUp={this.changeName}/>
+                        </div>
+                    </div>
+                );
+            },
+
+            changeSex : function (event) {
+                var sex = event.target.value;
+                this.props.setSex(sex);
+            },
+
+            changeName : function (event) {
+                var name = event.target.value;
+                this.props.setName(name);
+            }
+        });
+
+        var ListComp = React.createClass({
+            render : function(){
+                var students = this.props.students;
+                var fitlerSex = this.props.fitlerSex;
+                var filterName = this.props.filterName;
+                var sexArr = ['女', '男'];
+                var studentEles = [];
+                students.forEach(function (student, index) {
+                    var sexMatch = true;
+                    var nameMatch = true;
+                    if(fitlerSex!='') {
+                        sexMatch = sexArr[fitlerSex]===student.sex;
+                    }
+                    if(filterName!='') {
+                        nameMatch = student.stName.indexOf(filterName)!=-1;
+                    }
+
+                    if(sexMatch && nameMatch) {
+                        studentEles.push(
+                            <tr key={studentEles.length}>
+                                <td>{student.stName}</td>
+                                <td>{student.sex}</td>
+                                <td>{student.age}</td>
+                                <td>{student.height}</td>
+                                <td>{student.weight}</td>
+                                <td><a href="javascript:;" onClick={this.delete} index={index}>删除</a></td>
+                            </tr>
+                        ) ;
+                    }
+
+                }.bind(this));
+
+
+
+                return (
+                        <div className="table-responsive">
+                            <table className="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>性别</th>
+                                    <th>年龄</th>
+                                    <th>身高（cm）</th>
+                                    <th>体重（kg）</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tb">
+                                    {studentEles}
+                                </tbody>
+                            </table>
+                        </div>
+                );
+            },
+
+            delete : function () {
+                if(window.confirm('你确定要删除吗?')) {
+                    PubSub.publish("deleteStudent",this.props.index);
+                }
+            }
+        });
+
+        ReactDOM.render(<StudentComp/>, document.getElementById('students'));
+    </script>
+</body>
+
+</html>

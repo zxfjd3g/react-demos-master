@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>第一个React应用</title>
+    <script type="text/javascript" src="../build/react.js"></script>
+    <script type="text/javascript" src="../build/react-dom.js"></script>
+    <script type="text/javascript" src="../build/browser.min.js"></script>
+
+  </head>
+  <body>
+  <!--
+
+  1. 下载js库
+	react.js
+		React 的核心库
+	react-dom.js
+		提供与 DOM 相关的功能
+	browser.js
+		将 JSX 语法转为 JavaScript 语法
+  2. 在页面中导入js
+    <script type="text/javascript" src="../build/react.js"></script>
+    <script type="text/javascript" src="../build/react-dom.js"></script>
+    <script type="text/javascript" src="../build/browser.min.js"></script>
+  3. 编码
+    将模板转为HTML，并插入指定的 DOM 节点
+    <div id="example"></div>
+    <script type="text/babel">
+      ReactDOM.render(<h1>Hello, world!</h1>, document.getElementById('example'));
+    </script>
+  -->
+    <div id="example"></div>
+
+    <script type="text/babel">
+      //将模板转为HTML，并插入指定的 DOM 节点
+      ReactDOM.render(<h1>hello World</h1>, document.getElementById('example'));
+    </script>
+  </body>
+</html>

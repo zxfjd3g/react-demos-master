@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+    /*
+     使用propTypes对组件的props的属性值类型进行限制
+     1. 给组件指定propTypes:
+         propTypes: {
+            title: React.PropTypes.number.isRequired  //必须的, 数值类型
+         }
+     2. 在使用时
+        <MyTitle title={data}/>  //title属性必须指定, 且其值必须是number类型
+     3. 如果不能满足条件会抛出异常
+     */
+
+    var MyTitle = React.createClass({
+        render: function () {
+            return <h1>{this.props.name}---{this.props.age}</h1>;
+        },
+        propTypes : {
+            name : React.PropTypes.string.isRequired,
+            age : React.PropTypes.number.isRequired
+        }
+    });
+
+    var name = 'Tom';
+    var age = 23;
+    age = '23';
+    ReactDOM.render(<MyTitle name={name} age={age}/>, document.getElementById('example'));
+</script>
+</body>
+</html>
+

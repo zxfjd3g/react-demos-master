@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+</head>
+<body>
+<!--
+JSX
+1. JavaScript XML
+2. 在React组件内部构建HTML标签的类XML语法
+3. 可以是任意HTML标签, 也可以是自定义的任意名称标签
+4. 基本语法规则
+    1). 遇到 HTML 标签（以 < 开头），就用 HTML 规则解析
+	2). 遇到代码块（以 { 开头），就用JavaScript 规则解析
+
+ReactDOM.render(virtualDOM, containerDOM) : 将虚拟DOM元素渲染到真实容器DOM中显示
+    参数一: 创建的虚拟dom元素对象
+    参数二: 用来包含虚拟DOM元素的真实dom元素对象
+
+虚拟DOM
+    JSX:
+	    <h1 id='myTitle'>{title}</h1>
+    JS:
+        React.createElement('h1', {id:'myTitle'}, title)
+-->
+<div id="example"></div>
+<script type="text/babel">
+    var msg = '你爱我吗?';
+    //使用JSX创建VDOM
+    //ReactDOM.render(<h1 id="myMsg">{msg}</h1>, document.getElementById("example"));
+
+    //创建一个虚拟dom元素对象
+    var vElement = React.createElement('h2', {id : 'myMsg'}, msg+"-----");
+    //渲染
+    ReactDOM.render(vElement, document.getElementById('example'));
+</script>
+</body>
+</html>

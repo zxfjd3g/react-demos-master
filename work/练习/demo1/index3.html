@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
+           <style type="text/css">
+                .down_select{
+                    height: 20px;
+                    background: #fff;
+                    width: 60px;
+                    color: #000;
+                }
+                .handle {
+                    width: 40px;
+                    border:1px solid #ccc;
+                    background: #fff;
+                    position: absolute;
+                    right: 10px;
+                    top:1px;
+                    text-align: center;
+                }
+
+                .handle a{
+                    display: block;
+                    text-decoration: none;
+                }
+                .list-group-item .centence{
+                    padding: 0px 50px;
+                }
+                .user{
+                    font-size: 22px;
+                }
+                .reply {
+                    margin-top: 0px;
+                }
+                .list-group li {
+                    transition: .5s;
+                    overflow: hidden;
+                }
+            </style>
+    <script type="text/javascript" src="js/react.js"></script>
+    <script type="text/javascript" src="js/react-dom.js"></script>
+    <script type="text/javascript" src="js/browser.min.js"></script>
+</head>
+
+<body>
+    <header class="site-header jumbotron">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>请发表对React的评论</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="demo">
+    </div>
+
+    <script type="text/babel">
+        /*
+        1. 组件 :
+            MainComp
+            FormComp
+            ListComp
+        2. 初始化数组数据
+            [
+                {
+                    username : 'Tom',
+                    content : 'very good',
+                    id : Date.now()
+                },
+
+             {
+                 username : 'Tom',
+                 content : 'very good',
+                 id : Date.now()+1
+             }
+            ]
+         */
+
+        var comments = [
+                            {
+                                username : 'Tom',
+                                content : 'very good',
+                                id : Date.now()
+                            },
+
+                            {
+                                username : 'Tom',
+                                content : 'very good',
+                                id : Date.now()+1
+                            }
+                        ];
+
+        //1. 创建组件类
+        var MainComp = React.createClass({
+
+            render : function () {
+                return (
+                        <div className="container">
+                            <FormComp></FormComp>
+                            <ListComp comments={this.state.cs}></ListComp>
+                        </div>
+                );
+            },
+
+            getInitialState : function () {
+                return {
+                    cs : this.props.cs
+                };
+            }
+        });
+
+        var FormComp = React.createClass({
+
+            render : function () {
+                return (
+                        <div className="col-md-4">
+                            <form className="form-horizontal">
+                                <div className="form-group">
+                                    <label>用户名</label>
+                                    <input type="text" className="form-control" placeholder="用户名"/>
+                                </div>
+                                <div className="form-group">
+                                    <label>评论内容</label>
+                                    <textarea className="form-control" rows="6" placeholder="评论内容"></textarea>
+                                </div>
+                                <div className="form-group">
+                                    <div className="col-sm-offset-2 col-sm-10">
+                                        <button type="button" className="btn btn-default pull-right">提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                );
+            }
+        });
+
+        var ListComp = React.createClass({
+            render : function () {
+
+                var lis = this.props.comments.map(function (comment, index) {
+                    return (
+                            <li className="list-group-item" key={index}>
+                                <div className="handle" >
+                                    <a href="javascript:;">删除</a>
+                                </div>
+                                <p className="user" ><span >{comment.username}</span><span>说:</span></p>
+                                <p className="centence">{comment.content}</p>
+                            </li>
+                    );
+                });
+
+                //计算出display的值
+                var displayText = lis.length==0 ? 'block' : 'none';
+                return (
+                        <div className="col-md-8">
+                            <h3 className="reply">评论回复：</h3>
+                            <h2 style={{display : displayText}}>暂无评论，点击左侧添加评论！！！</h2>
+                            <ul className="list-group">{lis}</ul>
+                        </div>
+                );
+            }
+        });
+
+        //2. 渲染组件标签
+        ReactDOM.render(<MainComp cs={comments}/>, document.getElementById('demo'));
+
+    </script>
+</body>
+
+</html>

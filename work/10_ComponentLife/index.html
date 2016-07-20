@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+</head>
+<body>
+<div id="example"></div>
+<script type="text/babel">
+    /*
+     1. 组件的三个生命周期状态:
+         Mount：插入真实 DOM
+         Update：被重新渲染
+         Unmount：被移出真实 DOM
+     2. React 为每个状态都提供了两种处理函数，will 函数在进入状态之前调用，did 函数在进入状态之后调用
+         componentWillMount()
+         componentDidMount() : 已插入真实DOM, 在render之后才会执行
+         componentWillUpdate(object nextProps, object nextState)
+         componentDidUpdate(object prevProps, object prevState)
+         componentWillUnmount()
+     3. 两种特殊状态的处理函数
+         componentWillReceiveProps(object nextProps)：已加载组件收到新的参数时调用
+         shouldComponentUpdate(object nextProps, object nextState)：组件判断是否重新渲染时调用
+
+         调用函数对象的bind(obj)改变函数内部的this指向obj, 并返回函数
+     */
+
+
+    var MyComp = React.createClass({
+        render : function(){
+            return (
+                    <p style={{opacity : this.state.opacity}}>www.atguigu.com</p>
+            );
+        },
+
+        getInitialState : function () {
+            return {
+                opacity : 1.0
+            };
+        },
+
+        componentDidMount : function () {  //在ReactDOM.render之后调用
+            //启动循环定时器更新opacity的值
+            setInterval(function () {  //回调函数中的this默认是window,
+                //1. 得到当前的opacity
+                var opactity = this.state.opacity;
+                //2. 减少0.05
+                opactity -= 0.05;
+                //3. 如果<=0, 变为1
+                if(opactity<=0) {
+                    opactity = 1.0;
+                }
+                //4. 更新state
+                this.setState({
+                    opacity : opactity
+                });
+
+            }.bind(this), 100);
+        }
+    });
+
+    ReactDOM.render(<MyComp/>, document.getElementById('example'));
+</script>
+</body>
+</html>

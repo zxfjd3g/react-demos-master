@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="example"></div>
+    <script type="text/babel">
+      /*
+      列表显示数组中的所有数据
+      1). array.map()的使用
+      2). React自动遍历显示数组中所有的元素
+       */
+      var names = ['Tom2', 'Jack2', 'Bob2'];
+
+      //得到Li的数组
+      /*
+      var lis = [];
+      names.forEach(function (name, index) {
+          lis.push(<li key={index}>{name}</li>);
+      })
+      */
+     /*
+       var lis = names.map(function (name, index) { //遍历所有元素, 将函数的返回值放入返回的数组中
+       return <li key={index}>{name}</li>;
+       });
+       ReactDOM.render(<ul>{lis}</ul>, document.getElementById("example"));
+      */
+      ReactDOM.render(<ul>{
+        names.map(function (name, index) { //遍历所有元素, 将函数的返回值放入返回的数组中
+          return <li key={index}>{name}</li>;
+        })
+      }</ul>, document.getElementById("example"));
+
+    </script>
+  </body>
+</html>
